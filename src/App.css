@@ -1,0 +1,23 @@
+.app-container {
+	padding: 32px;
+}
+
+.input-field {
+	border-radius: 5px;
+	padding: 8px;
+	min-width: 300px;
+}
+
+.matrix-input {
+	width: 50px;
+}
+
+.matrixContainer {
+	margin-right: 16px;
+	margin-bottom: 16px;
+}
+
+.inline {
+	display: inline-block;
+}
+.marginRight { margin-right: 32px; }
