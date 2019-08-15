@@ -8,8 +8,9 @@ function App() {
 	const [nSize, setNSize] = useState('');
 	const [matrixA, setMatrixA] = useState([]);
 	const [matrixB, setMatrixB] = useState([]);
-	// const matrixA = null;
-	// const matrixB = null;
+	const [sumMatrix, setSumMatrix] = useState([]);
+	const [subsMatrix, setSubsMatrix] = useState([]);
+	const [multMatrix, setMultMatrix] = useState([]);
 
 	const changeMatrixValue = ({ target }, matrix, index1, index2) => {
 		if (matrix === 'matrixA') {
@@ -23,8 +24,8 @@ function App() {
 		}
 	};
  
-	const renderMatrixA = 
-		matrixA.map((item, index1) => 
+	const renderMatrix = (matrix, matrixName, disabled) => {
+		let renderedMatrix = matrix.map((item, index1) => 
 			<div key={index1}>
 				{
 					item.map((item2, index2) => {
@@ -35,37 +36,18 @@ function App() {
 							>
 								<input 
 									className="matrix-input"
+									disabled={disabled}
 									type="number"
 									value={item2}
-									onChange={(event) => changeMatrixValue(event, 'matrixA', index1, index2)}
+									onChange={(event) => changeMatrixValue(event, matrixName, index1, index2)}
 								/>
 							</div>
 					)})
 				}
 			</div>
 		);
-
-	const renderMatrixB = 
-		matrixB.map((item, index1) => 
-			<div key={index1}>
-				{
-					item.map((item2, index2) => {
-						return (
-							<div
-								className={'inline matrixContainer'}
-								key={`${index1}${index2}`}
-							>
-								<input 
-									className="matrix-input"
-									type="number"
-									value={matrixB[index1][index2]}
-									onChange={(event) => changeMatrixValue(event, 'matrixB', index1, index2)}
-								/>
-							</div>
-					)})
-				}
-			</div>
-		);
+		return renderedMatrix;
+	}
 
 	const calculate = () => {
 		let linealA = [];
@@ -73,8 +55,11 @@ function App() {
 		let sum = [];
 		let subs = [];
 		let mult = [];
+		let newSumMatrix = sumMatrix.slice();
+		let newSubsMatrix = subsMatrix.slice();
+		let newMultMatrix = multMatrix.slice();
 		let multCount = 0;
-		let n = parseInt(nSize)
+		let n = parseInt(nSize);
 
 		// Matrix to linear array
 		for (let i = 0; i < n; i++) {
@@ -82,25 +67,29 @@ function App() {
 				linealA[i * n + j] = parseInt(matrixA[i][j]);
 				linealB[i * n + j] = parseInt(matrixB[i][j]);
 			}
-		}		
-		// console.log(linealA, 'linealA');
-		// console.log(linealB, 'linealB');
+		}
 	
 		//Do operations in linear form
 		for (let i = 0; i < n * n; i++) {
 			sum[i] = linealA[i] + linealB[i];
 			subs[i] = linealA[i] - linealB[i];
 			for (let j = Math.floor(i/ n) * n, k = 0; j < n + Math.floor(i/ n) * n; j++, k += n) {
-				// console.log(j, k + i % n, i);
 				multCount += linealA[j] * linealB[k + i % n];
 			}
 			mult[i] = multCount;
 			multCount = 0;
 		}
-		
-		// console.log(sum, 'sum');
-		// console.log(subs, 'subs');
-		// console.log(mult, 'mult');
+
+		//Return lineal operations to matrix form
+		for (let i = 0; i < n * n; i++) {
+			newSumMatrix[Math.floor(i / n)][i % n] = sum[i];
+			newSubsMatrix[Math.floor(i / n)][i % n] = subs[i];
+			newMultMatrix[Math.floor(i / n)][i % n] = mult[i];
+		}
+
+		setSumMatrix(newSumMatrix)
+		setSubsMatrix(newSubsMatrix)
+		setMultMatrix(newMultMatrix)
 	}
 
 	useEffect(() => {
@@ -108,6 +97,9 @@ function App() {
 		if (n > 0) {
 			setMatrixA(Array(n).fill(0).map(x => Array(n).fill(0)));
 			setMatrixB(Array(n).fill(0).map(x => Array(n).fill(0)));
+			setSumMatrix(Array(n).fill(0).map(x => Array(n).fill(0)));
+			setSubsMatrix(Array(n).fill(0).map(x => Array(n).fill(0)));
+			setMultMatrix(Array(n).fill(0).map(x => Array(n).fill(0)));
 		} else {
 			setMatrixA([]);
 			setMatrixB([]);
@@ -129,11 +121,11 @@ function App() {
 				<div>
 					<div className='inline marginRight'>
 						<h3>Matriz A</h3>
-						{renderMatrixA}
+						{renderMatrix(matrixA, 'matrixA')}
 					</div>
 					<div className='inline marginRight'>
 						<h3>Matriz B</h3>
-						{renderMatrixB}
+						{renderMatrix(matrixB, 'matrixB')}
 					</div>
 					<button
 						onClick={calculate}
@@ -142,6 +134,20 @@ function App() {
 					</button>
 				</div>
 			)}
+			<div>
+				<div className='inline marginRight'>
+					<h3>Suma</h3>
+					{renderMatrix(sumMatrix, 'sumMatrix', true)}
+				</div>
+				<div className='inline marginRight'>
+					<h3>Resta</h3>
+					{renderMatrix(subsMatrix, 'subsMatrix', true)}
+				</div>
+				<div className='inline marginRight'>
+					<h3>Multiplicación</h3>
+					{renderMatrix(multMatrix, 'multMatrix', true)}
+				</div>
+			</div>
 		</div>
 	);
 }
