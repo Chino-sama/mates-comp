@@ -68,7 +68,39 @@ function App() {
 		);
 
 	const calculate = () => {
+		let linealA = [];
+		let linealB = [];
+		let sum = [];
+		let subs = [];
+		let mult = [];
+		let multCount = 0;
+		let n = parseInt(nSize)
 
+		// Matrix to linear array
+		for (let i = 0; i < n; i++) {
+			for (let j = 0; j < n; j++) {
+				linealA[i * n + j] = parseInt(matrixA[i][j]);
+				linealB[i * n + j] = parseInt(matrixB[i][j]);
+			}
+		}		
+		// console.log(linealA, 'linealA');
+		// console.log(linealB, 'linealB');
+	
+		//Do operations in linear form
+		for (let i = 0; i < n * n; i++) {
+			sum[i] = linealA[i] + linealB[i];
+			subs[i] = linealA[i] - linealB[i];
+			for (let j = Math.floor(i/ n) * n, k = 0; j < n + Math.floor(i/ n) * n; j++, k += n) {
+				// console.log(j, k + i % n, i);
+				multCount += linealA[j] * linealB[k + i % n];
+			}
+			mult[i] = multCount;
+			multCount = 0;
+		}
+		
+		// console.log(sum, 'sum');
+		// console.log(subs, 'subs');
+		// console.log(mult, 'mult');
 	}
 
 	useEffect(() => {
