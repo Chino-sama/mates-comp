@@ -14,16 +14,16 @@ export default function AppRouter () {
 				<nav>
 					<ul>
 						<li>
-							<Link to="/tarea1/">Tarea 1</Link>
+							<Link to="/tarea1">Tarea 1</Link>
 						</li>
 						<li>
-							<Link to="/tarea2/">Tarea 2</Link>
+							<Link to="/tarea2">Tarea 2</Link>
 						</li>
 					</ul>
 				</nav>
 
-				<Route path="/tarea1/" component={HW1} />
-				<Route path="/tarea2/" component={HW2} />
+				<Route path="/tarea1" component={HW1} />
+				<Route path="/tarea2" component={HW2} />
 			</div>
 		</Router>
 	);

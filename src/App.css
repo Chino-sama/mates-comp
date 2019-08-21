@@ -25,6 +25,7 @@
 	display: inline-block;
 }
 .marginRight { margin-right: 32px; }
+.margin-top { margin-top: 32px; }
 .linearText {
 	font-size: 1.2em;
 	width: 100%;
