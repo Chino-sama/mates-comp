@@ -3,19 +3,27 @@ import React, {
 	useEffect,
 } from 'react';
 import Matrix from '../Components/Matrix';
-// import Gist from 'react-gist';
+import Gist from 'react-gist';
 
 export default function HW3Route() {
 	const [isFirstLanguage, setIsFirstLanguage] = useState(true);
 	const [isWordAccepted, setIsWordAccepted] = useState(false);
-	const [word, setWord] = useState('')
+	const [word, setWord] = useState('');
+	const [showGist, setShowGist] = useState('');
 
 	const calculate = (languageTable) => {
+		//Starting state is q0
 		let currentState = 'q0';
-		for (const char of word)
-			currentState = languageTable[currentState][char];
-		if (languageTable[currentState].isAccepted)
+		//Iterate word
+		for (const value of word) {
+			//Access object properties, currentState and then value of the current char of the word
+			currentState = languageTable[currentState][value];
+		}
+		//If last state is acceptable then accept introduced word
+		if (languageTable[currentState].isAccepted){
 			return setIsWordAccepted(true);
+		}
+		//else the word is not accepted
 		setIsWordAccepted(false);
 	};
 
@@ -33,7 +41,9 @@ export default function HW3Route() {
 				<br/>
 				Nota: La cadena vacía es aceptada
 			</h4>
-			<div className='flex'>
+			<button onClick={() => setShowGist(!showGist)}>{showGist ? 'Ocultar': 'Mostrar'} código</button>
+			{showGist && <Gist id='ca5283c8437929f244224d71f1e0dd4f' />}
+			<div className='flex margin-top'>
 				<div className='marginRight'>
 					<input 
 						className="input-field"
@@ -65,10 +75,15 @@ export default function HW3Route() {
 					</button>
 				</div>
 				<div className='flex column'>
+					<h3 className='no-margin-top'>Tabla de trancisiones</h3>
 					<Matrix
 						headers={headers}
+						values={values}
 						data={isFirstLanguage ? firstLanguageTable: secondLanguageTable}
 					/>
+					<h3>
+						{isWordAccepted ? '¡Yay! La palabra pertenece al lenguage' :'La palabra NO pertenece al lenguage'}
+					</h3>
 				</div>
 			</div>
 		</div>
@@ -77,6 +92,7 @@ export default function HW3Route() {
 const headers = ['q0', 'q1', 'q2', 'q3'];
 const values = ['0', '1'];
 
+//Transicion tables in object form
 const firstLanguageTable = {
 	q0: {
 		'0': 'q2',

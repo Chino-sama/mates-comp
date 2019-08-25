@@ -26,6 +26,7 @@
 }
 .marginRight { margin-right: 32px; }
 .margin-top { margin-top: 32px; }
+.no-margin-top { margin-top: 0; }
 .linearText {
 	font-size: 1.2em;
 	width: 100%;
@@ -69,10 +70,8 @@ footer {
 	border-radius: 10px;
 	border: 1px #c3c3c3 solid;
 }
-
-.table div div {
+.table .section div, .table .header {
 	display: flex;
-	border-bottom: 1px #c3c3c3 solid;
 	border-right: 1px #c3c3c3 solid;
 	min-width: 70px;
 	height: 30px;
@@ -80,7 +79,6 @@ footer {
 	align-items: center;
 	padding: 4px;
 }
-
-.table div:last-child {
-	border-right: none;
-}
+.table .section, .table .header { border-bottom: 1px #c3c3c3 solid; }
+.table .section:last-child { border-bottom: none; }
+.table div:last-child { border-right: none; }

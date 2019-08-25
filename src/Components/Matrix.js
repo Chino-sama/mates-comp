@@ -5,23 +5,36 @@ import React, {
 
 export default function Matrix(props) {
 	const headers = () => {
-		let renderedHeaders = props.headers.map((item) => 
-			<div key={item}>{item}</div>
+		let renderedHeaders = props.headers.map((header) => 
+			<div key={header} className='header'><b>{header}</b></div>
 		);
 		return renderedHeaders;
 	};
+	
+	const data = (valueKey) => {
+		let renderedData = [];
+		for (let key in props.data) {
+			renderedData.push(
+				<div key={key}>{props.data[key][valueKey]}</div>
+			);
+		}
+		return renderedData;
+	};
+	
+	const sections = () => props.values.map(value =>
+		<div key={value} className='flex section'>
+			<div><b>{value}</b></div>
+			{data(value)}
+		</div>
+	);
+
 	const renderTable = () => (
 		<div className='table'>
 			<div className='flex'>
-				<div></div>
+				<div className='header'></div>
 				{headers()}
 			</div>
-			<div className='flex'>
-				<div>0</div>
-			</div>
-			<div className='flex'>
-				<div>1</div>
-			</div>
+			{sections()}
 		</div>
 	);
 	return renderTable();
