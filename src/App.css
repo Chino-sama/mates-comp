@@ -49,3 +49,38 @@ footer {
 	height: 3em;
 	border-radius: 100px;
 }
+
+/* flex-box */
+.flex { display: flex; }
+.column { flex-direction: column; }
+.stretch { align-content: flex-start; }
+
+.align-items-center { align-items: center; }
+
+.justify-content-center { justify-content: center; }
+
+.selected-btn {
+	background-color: #2bbfc4;
+}
+
+/* table */
+
+.table {
+	border-radius: 10px;
+	border: 1px #c3c3c3 solid;
+}
+
+.table div div {
+	display: flex;
+	border-bottom: 1px #c3c3c3 solid;
+	border-right: 1px #c3c3c3 solid;
+	min-width: 70px;
+	height: 30px;
+	justify-content: center;
+	align-items: center;
+	padding: 4px;
+}
+
+.table div:last-child {
+	border-right: none;
+}
