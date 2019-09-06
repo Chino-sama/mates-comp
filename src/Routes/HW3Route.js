@@ -77,6 +77,7 @@ export default function HW3Route() {
 				<div className='flex column'>
 					<h3 className='no-margin-top'>Tabla de trancisiones</h3>
 					<Matrix
+						disabled
 						headers={headers}
 						values={values}
 						data={isFirstLanguage ? firstLanguageTable: secondLanguageTable}

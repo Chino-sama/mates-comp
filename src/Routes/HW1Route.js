@@ -45,7 +45,7 @@ export default function HW1Route() {
 								key={`${index1}${index2}`}
 							>
 								<input 
-									className="matrix-input"
+									className="matrix-input hw1-input"
 									disabled={disabled}
 									type="number"
 									value={item2}

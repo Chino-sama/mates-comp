@@ -13,7 +13,14 @@
 }
 
 .matrix-input {
-	width: 50px;
+	width: 70px;
+	padding: 4px;
+	border: none;
+}
+
+.hw1-input {
+	border: 1px #c3c3c3 solid;
+	border-radius: 5px;
 }
 
 .matrixContainer {
@@ -69,8 +76,9 @@ footer {
 .table {
 	border-radius: 10px;
 	border: 1px #c3c3c3 solid;
+	overflow: hidden;
 }
-.table .section div, .table .header {
+.table .section input, .table .section div, .table .header {
 	display: flex;
 	border-right: 1px #c3c3c3 solid;
 	min-width: 70px;
@@ -81,4 +89,4 @@ footer {
 }
 .table .section, .table .header { border-bottom: 1px #c3c3c3 solid; }
 .table .section:last-child { border-bottom: none; }
-.table div:last-child { border-right: none; }
+.table div:last-child, .table input:last-child { border-right: none; }

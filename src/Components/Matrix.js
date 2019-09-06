@@ -15,7 +15,13 @@ export default function Matrix(props) {
 		let renderedData = [];
 		for (let key in props.data) {
 			renderedData.push(
-				<div key={key}>{props.data[key][valueKey]}</div>
+				<input 
+					className='matrix-input'
+					onChange={({target}) => props.onChange(target, key, valueKey)}
+					disabled={props.disabled}
+					key={key}
+					value={props.data[key][valueKey]}
+				/>
 			);
 		}
 		return renderedData;
