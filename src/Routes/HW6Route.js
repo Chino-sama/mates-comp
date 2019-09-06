@@ -25,7 +25,7 @@ export default function HW6Route() {
 		}	
 	});
 
-	const [AFNTransitions, setAFNTransitions] = useState(null);
+	const [AFNTransitions, setAFNTransitions] = useState({});
 	const [AFDTable, setAFDTable] = useState({});
 
 	const convert = () => {
@@ -99,8 +99,8 @@ export default function HW6Route() {
 				<div className='flex'>
 					<Matrix 
 						values={values}
-						onChange={onMatrixChange}
-						headers={headers}
+						disabled
+						headers={Object.keys(AFNTransitions)}
 						data={AFNTransitions}
 					/>
 				</div>

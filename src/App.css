@@ -13,7 +13,7 @@
 }
 
 .matrix-input {
-	width: 70px;
+	width: 100px;
 	padding: 4px;
 	border: none;
 }
@@ -78,6 +78,15 @@ footer {
 	border: 1px #c3c3c3 solid;
 	overflow: hidden;
 }
+
+.table .header {
+	width: 100px;
+}
+
+.table .header:first-child {
+	width: 70px;
+}
+
 .table .section input, .table .section div, .table .header {
 	display: flex;
 	border-right: 1px #c3c3c3 solid;
