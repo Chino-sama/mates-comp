@@ -59,18 +59,17 @@ export default function HW1Route() {
 			}
 		}
 
-		const allThreads = startAFNDThread(formattedTable, 0, 'q0');
+		const allThreads = startAFNDThread(formattedTable, 0, 'q0', true);
 		setThreads(allThreads);
 	}
 
 	//Start AFND Thread
-	const startAFNDThread = (table, charIndex, startState) => {
+	const startAFNDThread = (table, charIndex, startState, isFirst=false) => {
 		//Current thread state
 		let currentState = startState;
 		let currentThreads = [{
 			start: charIndex,
 			finish: charIndex,
-			fullThread: startState,
 			fullThreadArr: [startState],
 			finalState: startState
 		}];
@@ -78,7 +77,7 @@ export default function HW1Route() {
 		//Iterate word to test
 		for (const value of testString.value) {
 			//Access object properties, currentState and then value of the current char of the word
-			if (i > charIndex) {
+			if (i > charIndex || isFirst) {
 				if (table[currentState][value]) {
 					if (table[currentState][value].length === 1)
 						currentState = table[currentState][value][0];
@@ -89,7 +88,7 @@ export default function HW1Route() {
 						}
 						currentState = table[currentState][value][0];
 					}
-					currentThreads[0].fullThread += ` -> ${currentState}`;
+
 					currentThreads[0].fullThreadArr.push(currentState);
 					currentThreads[0].finalState = currentState;
 					currentThreads[0].finish = i;
