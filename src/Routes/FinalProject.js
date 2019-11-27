@@ -1,6 +1,6 @@
 import React, {
 	useState,
-	// useEffect
+	useEffect
 } from 'react';
 
 import Matrix from '../Components/Matrix';
@@ -14,7 +14,8 @@ export default function HW1Route() {
 	const [tableData, setTableData] = useState({});
 	const [tableHeaders, setTableHeaders] = useState([]);
 	const [tableValues, setTableValues] = useState([]);
-	const [threads, setThreads] = useState({});
+	const [threads, setThreads] = useState([]);
+	const [playThreads, setPlayThreads] = useState(false);
 
 	//MATRIX
 	const generateMatrix = (e) => {
@@ -47,6 +48,7 @@ export default function HW1Route() {
 	//Format Matrix values
 	const startAFND = (e) => {
 		e.preventDefault();
+		setPlayThreads(false);
 	
 		let formattedTable = JSON.parse(JSON.stringify(tableData));
 		for (let key in formattedTable) {
@@ -57,38 +59,40 @@ export default function HW1Route() {
 			}
 		}
 
-		const allThreads = startAFNDThread(formattedTable, 0, 0, 'q0');
+		const allThreads = startAFNDThread(formattedTable, 0, 'q0');
 		setThreads(allThreads);
 	}
 
 	//Start AFND Thread
-	const startAFNDThread = (table, iteration, charIndex, startState) => {
+	const startAFNDThread = (table, charIndex, startState) => {
 		//Current thread state
 		let currentState = startState;
 		let currentThreads = [{
 			start: charIndex,
 			finish: charIndex,
 			fullThread: startState,
+			fullThreadArr: [startState],
 			finalState: startState
 		}];
 		let i = 0;
 		//Iterate word to test
 		for (const value of testString.value) {
 			//Access object properties, currentState and then value of the current char of the word
-			if (i >= charIndex) {
+			if (i > charIndex) {
 				if (table[currentState][value]) {
 					if (table[currentState][value].length === 1)
 						currentState = table[currentState][value][0];
 					else {
 						for (let j = 1; j < table[currentState][value].length; j++) {
-							let newThread = startAFNDThread(table, iteration + j + i, i + 1, table[currentState][value][j]);
+							let newThread = startAFNDThread(table, i, table[currentState][value][j]);
 							currentThreads.push(...newThread);
 						}
 						currentState = table[currentState][value][0];
 					}
 					currentThreads[0].fullThread += ` -> ${currentState}`;
+					currentThreads[0].fullThreadArr.push(currentState);
 					currentThreads[0].finalState = currentState;
-					currentThreads[0].finish = i + 1;
+					currentThreads[0].finish = i;
 				} else
 					break;
 			}
@@ -97,6 +101,79 @@ export default function HW1Route() {
 		return currentThreads;
 	}
 
+	const renderWord = () => {
+		let renderedWord = [];
+		let i = 0;
+		for (const value of testString.value) {
+			renderedWord.push(<div key={i} id={`c${i}`} className='word'>{value}</div>);
+			i++;
+		}
+		return renderedWord;
+	}
+ 
+	const renderThreads = () => {
+		const renderStates = () =>
+			tableHeaders.map((item, index) => 
+				<div key={item} id={item} className='header'><b>{item}</b></div>
+			);
+
+		return threads.map((item, index) =>
+			<div key={index} id={`container${index}`} className='hidden'>
+				<p id={`path${index}`} className='margin-top small-margin-bottom'></p>
+				<div id={`t${index}`} className='table inline-block'>
+					<div className='flex'>
+						{renderStates()}
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+	const startThreads = () => {
+		let i = 0;
+		let j = 0;
+		for (const value of testString.value) {
+			setTimeout(() => {
+				if (i - 1 > -1)
+					document.querySelector(`#c${i - 1}`).style.color = "#000";
+				document.querySelector(`#c${i}`).style.color = "#EF2626";
+				threads.forEach((thread, index) => {
+					if (thread.start <= i && thread.finish >= i) {
+						if ((i - thread.start - 1) > -1)
+							document.querySelector(`#t${index} #${thread.fullThreadArr[i - thread.start - 1]}`).style.backgroundColor = "#fff";
+						document.querySelector(`#container${index}`).classList.remove('hidden');
+						document.querySelector(`#path${index}`).innerHTML = thread.fullThreadArr.slice(0, i - thread.start + 1).join(' -> ');
+						document.querySelector(`#t${index} #${thread.fullThreadArr[i - thread.start]}`).style.backgroundColor = "#5faaffaa";
+						if (testString.value.length === i + 1) {
+							const acceptanceStatesArr = acceptanceStates.value.split(",").map(item => item.trim());
+							if (acceptanceStatesArr.indexOf(thread.finalState) > -1) {
+								document.querySelector(`#path${index}`).innerHTML = thread.fullThreadArr.slice(0, i - thread.start + 1).join(' -> ') + " -> <span style='color: #30dd77'>ACEPTADO :D</span>";
+								document.querySelector(`#t${index} #${thread.fullThreadArr[i - thread.start]}`).style.backgroundColor = "#30dd77";
+							} else {
+								document.querySelector(`#path${index}`).innerHTML = thread.fullThreadArr.slice(0, i - thread.start + 1).join(' -> ') + " -> <span style='color: #EF2626'>NO ACEPTADO</span>";
+								document.querySelector(`#t${index} #${thread.fullThreadArr[i - thread.start]}`).style.backgroundColor = "#EF2626";
+							}
+						}
+					} else if (thread.start <= i && thread.finish === i - 1) {
+						document.querySelector(`#path${index}`).innerHTML = thread.fullThreadArr.slice(0, i - thread.start + 1).join(' -> ') + " -> <span style='color: #EF2626'>NO ACEPTADO</span>";
+						document.querySelector(`#t${index} #${thread.fullThreadArr[i - thread.start - 1]}`).style.backgroundColor = "#EF2626";
+					}
+				});
+				i++;
+			}, 1000 * (j + 1));
+			j++;
+		}
+	}
+
+	useEffect(() => {
+		if (threads.length)
+			setPlayThreads(true);
+	}, [threads]);
+
+	useEffect(() => {
+		if (threads.length && playThreads)
+			startThreads() 
+	}, [playThreads]);
 
 	return (
 		<div>
@@ -164,6 +241,16 @@ export default function HW1Route() {
 									Iniciar AFND
 								</button>
 							</form>
+							{!!threads.length && playThreads &&
+								<div className='flex'>
+									<div className='flex column'>
+										<div className='flex margin-top'>
+											{renderWord()}
+										</div>
+										{renderThreads()}
+									</div>
+								</div>
+							}
 						</div>
 					}
 				</div>

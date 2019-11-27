@@ -26,6 +26,10 @@
 	border-radius: 5px;
 }
 
+.word {
+	font-size: 36px;
+}
+
 .matrixContainer {
 	margin-right: 16px;
 	margin-bottom: 16px;
@@ -39,6 +43,7 @@
 .margin-left { margin-left: 16px; }
 .margin-top { margin-top: 24px; }
 .margin-bottom { margin-top: 24px; }
+.small-margin-bottom { margin-top: 8px; }
 .no-margin-top { margin-top: 0; }
 .no-margin { margin: 0; }
 .linearText {
@@ -65,14 +70,19 @@ footer {
 	border-radius: 100px;
 }
 
+
 /* flex-box */
 .flex { display: flex; }
 .column { flex-direction: column; }
 .stretch { align-content: flex-start; }
 
 .align-items-center { align-items: center; }
+.align-self-flex-start { align-self: flex-start; }
 
 .justify-content-center { justify-content: center; }
+
+.hidden { display: none; }
+.inline-block { display: inline-block; }
 
 /* btns */
 
