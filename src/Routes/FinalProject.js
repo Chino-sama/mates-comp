@@ -7,12 +7,14 @@ import Matrix from '../Components/Matrix';
 import useFormInput from '../custom-hooks/UseFormInput';
 
 export default function HW1Route() {
-	const numberOfStates = useFormInput('');
-	const alphabet = useFormInput('');
-	const acceptanceStates = useFormInput('');
+	const numberOfStates = useFormInput('3');
+	const alphabet = useFormInput('0, 1');
+	const acceptanceStates = useFormInput('q2');
+	const testString = useFormInput('');
 	const [tableData, setTableData] = useState({});
 	const [tableHeaders, setTableHeaders] = useState([]);
 	const [tableValues, setTableValues] = useState([]);
+	const [threads, setThreads] = useState({});
 
 	//MATRIX
 	const generateMatrix = (e) => {
@@ -40,6 +42,61 @@ export default function HW1Route() {
 			...newTable[valueKey]
 		});
 	};
+
+	//AFND
+	//Format Matrix values
+	const startAFND = (e) => {
+		e.preventDefault();
+	
+		let formattedTable = JSON.parse(JSON.stringify(tableData));
+		for (let key in formattedTable) {
+			for (let key2 in formattedTable[key]) {
+				if (formattedTable[key][key2] && key2 !== 'isAccepted') {
+					formattedTable[key][key2] = formattedTable[key][key2].split(",").map(item => item.trim());
+				}
+			}
+		}
+
+		const allThreads = startAFNDThread(formattedTable, 0, 0, 'q0');
+		setThreads(allThreads);
+	}
+
+	//Start AFND Thread
+	const startAFNDThread = (table, iteration, charIndex, startState) => {
+		//Current thread state
+		let currentState = startState;
+		let currentThreads = [{
+			start: charIndex,
+			finish: charIndex,
+			fullThread: startState,
+			finalState: startState
+		}];
+		let i = 0;
+		//Iterate word to test
+		for (const value of testString.value) {
+			//Access object properties, currentState and then value of the current char of the word
+			if (i >= charIndex) {
+				if (table[currentState][value]) {
+					if (table[currentState][value].length === 1)
+						currentState = table[currentState][value][0];
+					else {
+						for (let j = 1; j < table[currentState][value].length; j++) {
+							let newThread = startAFNDThread(table, iteration + j + i, i + 1, table[currentState][value][j]);
+							currentThreads.push(...newThread);
+						}
+						currentState = table[currentState][value][0];
+					}
+					currentThreads[0].fullThread += ` -> ${currentState}`;
+					currentThreads[0].finalState = currentState;
+					currentThreads[0].finish = i + 1;
+				} else
+					break;
+			}
+			i++;
+		}
+		return currentThreads;
+	}
+
 
 	return (
 		<div>
@@ -82,19 +139,31 @@ export default function HW1Route() {
 					{!!tableHeaders.length &&
 						<div>
 							<h4 className='no-margin-top'>Matriz de Transiciones</h4>
-							<Matrix 
-								values={tableValues}
-								onChange={onMatrixChange}
-								headers={tableHeaders}
-								data={tableData}
-							/>
-							<button 
-								className='btn margin-top'
-								type='submit'
-								onClick={() => {}}
-							>
-								Iniciar AFND
-							</button>
+							<div className='flex'>
+								<Matrix 
+									values={tableValues}
+									onChange={onMatrixChange}
+									headers={tableHeaders}
+									data={tableData}
+								/>
+							</div>
+							<h4 className='vertical-margin'>Cadena a probar</h4>
+							<form>
+								<input
+									className='input-field'
+									type='text'
+									placeholder='Ej. 10101010'
+									{...testString}
+								/>
+								<button 
+									className='btn margin-left'
+									type='submit'
+									disabled={!testString.value}
+									onClick={startAFND}
+								>
+									Iniciar AFND
+								</button>
+							</form>
 						</div>
 					}
 				</div>

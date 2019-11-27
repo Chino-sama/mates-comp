@@ -34,7 +34,9 @@
 .inline {
 	display: inline-block;
 }
+.vertical-margin { margin: 12px 0; }
 .marginRight { margin-right: 32px; }
+.margin-left { margin-left: 16px; }
 .margin-top { margin-top: 24px; }
 .margin-bottom { margin-top: 24px; }
 .no-margin-top { margin-top: 0; }
