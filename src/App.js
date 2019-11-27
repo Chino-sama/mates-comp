@@ -15,6 +15,8 @@ function App() {
 				<br/>
 				<br/>
 				Roberto Javier Huerta González - A01273164
+				<br/>
+				Jessica Michelle Sánchez Reyes - A01273146
 			</footer>
 		</div>
 	);
