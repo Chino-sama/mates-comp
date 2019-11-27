@@ -11,7 +11,7 @@ function App() {
 			<AppRouter />
 			<footer>
 				<a className='github-link' href="https://github.com/Chino-sama/mates-comp" target="_blank"></a>
-				Github para el código fuente
+				Github para código fuente
 				<br/>
 				<br/>
 				Roberto Javier Huerta González - A01273164
